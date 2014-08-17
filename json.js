@@ -117,8 +117,20 @@ var readNumeric = ( function(){
  * @param {string} val - The next character being read in
  */
 var readQuoted = ( function(){
+  var lastVal = ""
+
   return function( val ){
-    /* @todo implement */
+
+    if( val !== readQuoted.quoteVal || readQuoted.quoteType === "\x5c" ){
+      // Non-string ending char, or quote/tick escaped by backslash
+      current.val = val
+      lastVal = val
+    } else {
+      // End of string has been reached
+      lastVal = ""
+      readQuoted.quoteType = ""
+      current.state = readBracket
+    }
   }
 }() )
 
