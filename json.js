@@ -55,8 +55,36 @@ var readUnquoted = ( function(){
  * @param {string} val - The next character being read in
  */
 var readBracket = ( function(){
+  var hasQuote = false
+  var hasDigit = false
+
   return function( val ){
-    /* @todo implement */
+
+    if( /\s/.test( val ) ){
+      // Ignore white space
+    } else if( /\d/.test( val ) && !hasQuote ){
+      // Digit encountered, and no quotes found
+      current.val = val
+      var hasDigit = true
+      current.type = "number"
+      current.state = readNumeric
+    } else if( /['"]/.test( val ) && !hasQuote && !hasDigit ){
+      // First quote has been found
+      hasQuote = true
+      current.type = "quoted"
+      readQuoted.quoteType = val
+      current.state = readQuoted
+    } else if( val === "]" || typeof val === "object" ){
+      hadQuote = false
+      hasDigit = false
+      completeItem()
+    } else {
+      // Nothing else should be valid here
+      parseError( "Invaid (or missing) unquoted characters in bracket: " + val )
+    }
+
+  }
+}() )
   }
 }() )
 
