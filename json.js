@@ -28,23 +28,23 @@ function parseError( msg ){
 var readUnquoted = ( function(){
   return function( val ){
 
-    var len = current.val.length
-    if( /\w/.test( val ) && len > 0 || /[a-z_/i.test( val ) && len === 0 ){
+    var len = current.item.val.length
+    if( /\w/.test( val ) && len > 0 || /[a-z_]/i.test( val ) && len === 0 ){
       // Val is alphanum or _, and is not first char, or is alphabetic or
       // _, and first char
 
       // Consume character
-      current.type = "unquoted"
-      item.val += val
+      current.item.type = "unquoted"
+      current.item.val += val
     } else if( val === "." ){
       // Finish item
       completeItem()
-    } else if{ val === "[" }{
+    } else if( val === "[" ){
       // New item is beginning in bracket notation
       completeItem()
       current.state = readBracket
     } else {
-      parseError( "Invalid JS identifier: " + current.val + val )
+      parseError( "Invalid JS identifier: " + current.item.val + val )
     }
 
   }
@@ -64,19 +64,20 @@ var readBracket = ( function(){
       // Ignore white space
     } else if( /\d/.test( val ) && !hasQuote ){
       // Digit encountered, and no quotes found
-      current.val = val
-      var hasDigit = true
-      current.type = "number"
+      current.item.val = val
+      hasDigit = true
+      current.item.type = "number"
       current.state = readNumeric
     } else if( /['"]/.test( val ) && !hasQuote && !hasDigit ){
       // First quote has been found
       hasQuote = true
-      current.type = "quoted"
+      current.item.type = "quoted"
       readQuoted.quoteType = val
       current.state = readQuoted
     } else if( val === "]" || typeof val === "object" ){
-      hadQuote = false
+      hasQuote = false
       hasDigit = false
+      current.state = readUnquoted
       completeItem()
     } else {
       // Nothing else should be valid here
@@ -96,7 +97,7 @@ var readNumeric = ( function(){
 
     if( /\d/.test( val ) && !numEnded ){
       // Read another digit
-      current.val += val
+      current.item.val += val
     } else if( /\s/.test( val ) ){
       // Allow white space after digits
       numEnded = true
@@ -104,9 +105,10 @@ var readNumeric = ( function(){
       // End reading of digits
       numEnded = false
       readBracket( { reset: true } )
+      current.state = readUnquoted
       completeItem()
     } else {
-      parseError( "Invalid array index:" current.val + val )
+      parseError( "Invalid array index:" + current.item.val + val )
     }
 
   }
@@ -121,9 +123,9 @@ var readQuoted = ( function(){
 
   return function( val ){
 
-    if( val !== readQuoted.quoteVal || readQuoted.quoteType === "\x5c" ){
+    if( val !== readQuoted.quoteType || readQuoted.quoteType === "\x5c" ){
       // Non-string ending char, or quote/tick escaped by backslash
-      current.val = val
+      current.item.val += val
       lastVal = val
     } else {
       // End of string has been reached
