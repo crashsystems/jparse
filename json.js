@@ -85,6 +85,30 @@ var readBracket = ( function(){
 
   }
 }() )
+
+/*
+ * Consume numeric characters inside brackets
+ * @param {string} val - The next character being read in
+ */
+var readNumeric = ( function(){
+  var numEnded = false
+  return function( val ){
+
+    if( /\d/.test( val ) && !numEnded ){
+      // Read another digit
+      current.val += val
+    } else if( /\s/.test( val ) ){
+      // Allow white space after digits
+      numEnded = true
+    } else if( val === "]" ){
+      // End reading of digits
+      numEnded = false
+      readBracket( { reset: true } )
+      completeItem()
+    } else {
+      parseError( "Invalid array index:" current.val + val )
+    }
+
   }
 }() )
 
