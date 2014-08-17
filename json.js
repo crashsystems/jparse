@@ -34,6 +34,7 @@ var readUnquoted = ( function(){
       // _, and first char
 
       // Consume character
+      current.type = "unquoted"
       item.val += val
     } else if( val === "." ){
       // Finish item
