@@ -168,7 +168,26 @@ function readInput(){
  * @returns {array} A list of selectors
  */
 function parseSelectors(){
-  /* @todo implement */
+  // Loop through argments, grabbing raw selectos
+  var input = ""
+  var length = process.argv.length
+  for( var i = 2; i < length; i += 1 ){
+    input += process.argv[i]
+  }
+
+  // Loop through input, constructing selectors
+  var inputLength = input.length
+  for( var i = 0; i < inputLength; i += 1 ){
+    current.state( input[i] )
+  }
+  completeItem()
+
+  // Filter out null selectors
+  var selectors = completedItems.filter( function( item ){
+    return item.val.length > 0
+  } )
+
+  return selectors
 }
 
 /*
