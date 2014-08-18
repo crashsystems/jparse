@@ -149,7 +149,18 @@ current.state = readUnquoted
  * Read input from stdin, until it closes
  */
 function readInput(){
-  /* @todo implement */
+  var rawInput = ""
+
+  // Read data as it comes in
+  process.stdin.on( "data", function( data ){
+    rawInput += data.toString()
+  } )
+
+  process.stdin.on( "close", function(){
+    var selectors = parseSelectors()
+    var selection = filterData( selectors, rawInput )
+    printOutput( selection )
+  } )
 }
 
 /*
