@@ -142,3 +142,40 @@ var readQuoted = ( function(){
 
 // Set initial state
 current.state = readUnquoted
+
+/* === JSON parsing code === */
+
+/*
+ * Read input from stdin, until it closes
+ */
+function readInput(){
+  /* @todo implement */
+}
+
+/*
+ * Parse object selectors out of the parameters
+ * @returns {array} A list of selectors
+ */
+function parseSelectors(){
+  /* @todo implement */
+}
+
+/*
+ * Given a list of object selectors, get the referenced child
+ * @param {array} selectors - List of object selectors
+ * @param {string} data - Input read from stdin
+ * @returns {object} - Child object referenced by user
+ */
+function filterData( selectors, data ){
+  /* @todo implement */
+}
+
+/*
+ * Pretty print output, with indentation & syntax highlighting
+ * @param {object} output - Object to print
+ */
+function printOutput( output ){
+  /* @todo implement */
+}
+
+readInput()
