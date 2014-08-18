@@ -17,8 +17,12 @@ function completeItem(){
   current.item = { type: "", val: "" }
 }
 
+/* Print out an error and exit
+ * @param {string} msg - Error message to print
+ */
 function parseError( msg ){
-  /* @todo implement */
+  console.log( msg )
+  process.exit( 1 )
 }
 
 /*
