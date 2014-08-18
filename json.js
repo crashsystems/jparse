@@ -197,7 +197,32 @@ function parseSelectors(){
  * @returns {object} - Child object referenced by user
  */
 function filterData( selectors, data ){
-  /* @todo implement */
+  var input = {}
+
+  // Parse JSON input
+  ( function(){
+    try{
+      input = JSON.parse( data, null, 2 )
+    } catch( e ){
+      parseError( "Invalid JSON" )
+    }
+  }() )
+
+  // Grab selected item
+  var selection = data
+  var done = false
+  var selectorCount = selectors.length
+
+  for( var i = 0; i < selectorCount && !done; i += 1 ){
+    var selected = selection[ selectors[i].val ]
+    if( selected === undefined ){
+      selection = selected
+    } else {
+      done = true
+    }
+  }
+
+  return selection
 }
 
 /*
