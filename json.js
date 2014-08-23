@@ -1,4 +1,5 @@
 var syntaxHighlight = require( "pygments" ).colorize
+var highlight = true
 
 /* === State Management Functions === */
 
@@ -172,8 +173,16 @@ function readInput(){
 function parseSelectors(){
   // Loop through argments, grabbing raw selectos
   var input = ""
+  var startpos = 2
   var length = process.argv.length
-  for( var i = 2; i < length; i += 1 ){
+
+  // Detect --nohighlight flag
+  if( process.argv[2] === "--nohighlight" ){
+    highlight = false
+    startpos = 3
+  }
+
+  for( var i = startpos; i < length; i += 1 ){
     input += process.argv[i]
   }
 
@@ -253,9 +262,13 @@ function printOutput( output ){
   } else if( type === "object" ){
     // Pretty print, with syntax highlighting
     var stringified = JSON.stringify( output, null, 2)
-    syntaxHighlight( stringified, "json", "console", function( data ){
-      console.log( data )
-    } )
+    if( highlight ){
+      syntaxHighlight( stringified, "json", "console", function( data ){
+        console.log( data )
+      } )
+    } else {
+      console.log( stringified )
+    }
   } else {
     // Unrecognized type, so error out
     console.log( "Unrecognized output type" )
