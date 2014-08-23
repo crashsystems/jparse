@@ -204,22 +204,22 @@ function filterData( selectors, data ){
   var input = {}
 
   // Parse JSON input
-  ( function(){
+  ;( function(){
     try{
       input = JSON.parse( data, null, 2 )
-    } catch( e ){
+    } catch( e ) {
       parseError( "Invalid JSON" )
     }
   }() )
 
   // Grab selected item
-  var selection = data
+  var selection = input
   var done = false
   var selectorCount = selectors.length
 
   for( var i = 0; i < selectorCount && !done; i += 1 ){
     var selected = selection[ selectors[i].val ]
-    if( selected === undefined ){
+    if( selected !== undefined ){
       selection = selected
     } else {
       done = true
