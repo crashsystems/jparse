@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var syntaxHighlight = require( "pygments" ).colorize
 var highlight = true
 
