@@ -1,3 +1,5 @@
+var syntaxHighlight = require( "pygments" ).colorize
+
 /* === State Management Functions === */
 
 // Hold current state
@@ -234,7 +236,30 @@ function filterData( selectors, data ){
  * @param {object} output - Object to print
  */
 function printOutput( output ){
-  /* @todo implement */
+  // Detect what type of data is being printed
+  var type = typeof output
+  if( type === "object" ){
+    if( output.sort ){
+      type = "array"
+    }
+  }
+
+  // Print output with different formats for each type
+  if( type === "number" || type === "string" ){
+    console.log( output )
+  } else if( type === "array" ){
+    // print out one item per line
+    console.log( output.join( "\n" ) )
+  } else if( type === "object" ){
+    // Pretty print, with syntax highlighting
+    var stringified = JSON.stringify( output, null, 2)
+    syntaxHighlight( stringified, "json", "console", function( data ){
+      console.log( data )
+    } )
+  } else {
+    // Unrecognized type, so error out
+    console.log( "Unrecognized output type" )
+  }
 }
 
 readInput()
