@@ -183,9 +183,13 @@ function parseSelectors(){
   completeItem()
 
   // Filter out null selectors
-  var selectors = completedItems.filter( function( item ){
-    return item.val.length > 0
-  } )
+  var selectors = []
+  var completed = completedItems.length
+  for( var i = 0; i < completed; i += 1 ){
+    if( completedItems[i].val.length > 0 ){
+      selectors.push( completedItems[i] )
+    }
+  }
 
   return selectors
 }
