@@ -13,7 +13,7 @@ var completedItems = []
  * Complete the current item
  */
 function completeItem(){
-  completedItems.push( completedItems.push( current.item ) )
+  completedItems.push( current.item )
   current.item = { type: "", val: "" }
 }
 
