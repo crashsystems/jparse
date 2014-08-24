@@ -83,7 +83,7 @@ var readBracket = ( function(){
       current.item.type = "quoted"
       readQuoted.quoteType = val
       current.state = readQuoted
-    } else if( val === "]" || typeof val === "object" ){
+    } else if( val === "]" || val === null ){
       hasQuote = false
       hasDigit = false
       current.state = readUnquoted
@@ -113,7 +113,7 @@ var readNumeric = ( function(){
     } else if( val === "]" ){
       // End reading of digits
       numEnded = false
-      readBracket( { reset: true } )
+      readBracket( null )
       current.state = readUnquoted
       completeItem()
     } else {
