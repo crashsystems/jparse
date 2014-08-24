@@ -12,6 +12,10 @@ On OSX, you can use Python's `easy_install` program to install it:
 
     easy_install pygments
 
+Once pygments has been installed, use npm to install jparse:
+
+    npm install -g jparse
+
 ## Usage
 
 To parse JSON, just pipe JSON output from another command into jparse, then specify the properties to access as CLI parameters.
